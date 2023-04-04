@@ -2,6 +2,10 @@ package es.studium.practicaProgramaGestion;
 
 import java.awt.Choice;
 import java.awt.TextArea;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -9,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class ConexionP {
@@ -23,6 +29,8 @@ public class ConexionP {
 	Statement statement = null;
 	ResultSet rs = null;
 
+	static String nombreUsuario;
+	
 	ConexionP() {
 
 		connection = this.conectar();
@@ -53,6 +61,8 @@ public class ConexionP {
 			rs = statement.executeQuery(cadena);
 
 			if (rs.next()) {
+				setNombreUsuario(rs.getString("nombreUsuario"));
+				actualizarLog("Se ha logueado.");
 				return rs.getInt("tipoUsuario");
 			} else {
 				return -1;
@@ -69,6 +79,7 @@ public class ConexionP {
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
+			actualizarLog(sentencia);
 			return 0;
 		} catch (SQLException sqle) {
 			System.out.println("Error 2-" + sqle.getMessage());
@@ -78,19 +89,22 @@ public class ConexionP {
 
 	public void rellenarListaPacientes(TextArea listaPacientes) {
 
-		String sentencia = "select idPaciente, nombrePaciente, DNIPaciente, edadPAciente, fechaInicioTratamiento from practicagestion.pacientes";
+		String sentencia = "select idPaciente, nombrePaciente, DNIPaciente, edadPaciente, fechaInicioTratamiento from practicagestion.pacientes";
 
 		try {
 
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet resultado = statement.executeQuery(sentencia);
-
+			
+			actualizarLog(sentencia);
+			
 			while (resultado.next()) {
+				String fechaFormateada=fechaFormatToEspanyol(resultado.getString("fechaInicioTratamiento"));
 				listaPacientes.append(resultado.getString("idPaciente") + " ");
 				listaPacientes.append(resultado.getString("nombrePaciente") + " ");
 				listaPacientes.append(resultado.getString("DNIPaciente") + " ");
 				listaPacientes.append(resultado.getString("edadPaciente") + " ");
-				listaPacientes.append(resultado.getString("fechaInicioTratamiento") + "\n");
+				listaPacientes.append(fechaFormateada + "\n");
 			}
 		} catch (SQLException sqle) {
 			System.out.println("Error 5-" + sqle.getMessage());
@@ -122,6 +136,7 @@ public class ConexionP {
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
+			actualizarLog(sentencia);
 			return 0;
 
 		} catch (SQLException sqle) {
@@ -153,6 +168,7 @@ public class ConexionP {
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
+			actualizarLog(sentencia);
 			return 0;
 		} catch (SQLException sqle) {
 			System.out.println("Error 9-" + sqle.getMessage());
@@ -180,12 +196,40 @@ public class ConexionP {
 		try {
 			date1 = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
 		String fechaNueva = formatoFecha.format(date1);
 		return fechaNueva;
+	}
+	
+	// Método para guardar en nombreUsuario el nombre del usuario que se registre.
+	public void setNombreUsuario (String nombreUsuario) {
+		ConexionP.nombreUsuario = nombreUsuario;
+	}
+	
+	public void actualizarLog (String cadena) {
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();
+		String ahora = dtf.format(now);
+		
+		// Se crea una cadena que incluye el momento actual, el nombre de usuario y la cadena
+		// que se le pasa por parámetros (que es la sentencia en la mayoría de casos).
+		// Esta cadena final se imprime en el fichero .log.
+		String cadenaFinal = "[" + ahora + "][" + nombreUsuario + "]" + cadena;
+	
+		try {
+			FileWriter fw = new FileWriter("registro.log", true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			pw.println(cadenaFinal);
+			
+			pw.close(); bw.close(); fw.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

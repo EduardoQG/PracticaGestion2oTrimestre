@@ -22,6 +22,8 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 	MenuItem pacItemBaja = new MenuItem("Baja");
 	MenuItem pacItemModificar = new MenuItem("Modificar");
 	
+	ConexionP conexion = new ConexionP();
+	
 	/* 
 	(TERCER TRIMESTRE) 
 	MenuItem psiItemNuevo = new MenuItem("Nuevo");
@@ -72,6 +74,7 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 
 	@Override
 	public void windowClosing(WindowEvent e) {
+		conexion.actualizarLog("Ha salido.");
 		System.exit(0);
 	}
 
