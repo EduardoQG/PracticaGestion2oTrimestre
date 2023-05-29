@@ -17,16 +17,16 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 
-public class ListadoPacientesP implements WindowListener, ActionListener {
+public class ListadoPsicologosP implements WindowListener, ActionListener {
 
-	Frame ventana = new Frame("Listado Pacientes");
+	Frame ventana = new Frame("Listado Psicólogos");
 
-	TextArea listaPacientes = new TextArea(6, 30);
+	TextArea listaPsicologos = new TextArea(6, 30);
 	Button btnPdf = new Button("PDF");
 
 	ConexionP conexion = new ConexionP();
 
-	ListadoPacientesP() {
+	ListadoPsicologosP() {
 
 		ventana.setSize(300, 225);
 		ventana.setResizable(false);
@@ -35,13 +35,12 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 
 		ventana.addWindowListener(this);
 
-		ventana.add(listaPacientes);
+		ventana.add(listaPsicologos);
 		ventana.add(btnPdf);
-
-		listaPacientes.append("   Nombre / Dni / Edad / Fecha Ingreso\n");
-		conexion.rellenarListaPacientes(listaPacientes);
-
 		btnPdf.addActionListener(this);
+
+		listaPsicologos.append("   Nombre  /  DNI\n");
+		conexion.rellenarListaPsicologos(listaPsicologos);
 
 		ventana.setVisible(true);
 	}
@@ -88,7 +87,7 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 				// Initialize document
 				Document document = new Document(pdf);
 				// Add paragraph to the document
-				document.add(new Paragraph("LISTA PACIENTES\n" + listaPacientes.getText()));
+				document.add(new Paragraph("LISTA PSICOLOGOS\n" + listaPsicologos.getText()));
 				// Close document
 				document.close();
 				// Open the new PDF document just created
@@ -97,6 +96,6 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 			} catch (IOException ioe) {
 			}
 		}
-
+		
 	}
 }

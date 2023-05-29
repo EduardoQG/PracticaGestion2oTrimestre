@@ -30,11 +30,13 @@ public class ConexionP {
 	ResultSet rs = null;
 
 	static String nombreUsuario;
-	
+
 	ConexionP() {
 
 		connection = this.conectar();
 	}
+
+	// MÉTODOS GENERALES:
 
 	public Connection conectar() {
 
@@ -61,7 +63,7 @@ public class ConexionP {
 			rs = statement.executeQuery(cadena);
 
 			if (rs.next()) {
-				setNombreUsuario(rs.getString("nombreUsuario"));
+				setNombreUsuario(u);
 				actualizarLog("Se ha logueado.");
 				return rs.getInt("tipoUsuario");
 			} else {
@@ -74,12 +76,70 @@ public class ConexionP {
 		return -1;
 	}
 
-	public int altaPaciente(String sentencia) {
+	public String fechaFormatToAnglosajon(String fecha) {
+
+		Date date1 = null;
+		try {
+			date1 = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+		String fechaNueva = formatoFecha.format(date1);
+		return fechaNueva;
+	}
+
+	public String fechaFormatToEspanyol(String fecha) {
+
+		Date date1 = null;
+		try {
+			date1 = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+		String fechaNueva = formatoFecha.format(date1);
+		return fechaNueva;
+	}
+
+	// Método para guardar en nombreUsuario el nombre del usuario que se registre.
+	public void setNombreUsuario(String nombreUsuario) {
+		ConexionP.nombreUsuario = nombreUsuario;
+	}
+
+	public void actualizarLog(String cadena) {
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		String ahora = dtf.format(now);
+
+		// Se crea una cadena que incluye el momento actual, el nombre de usuario y la
+		// cadena
+		// que se le pasa por parámetros (que es la sentencia en la mayoría de casos).
+		// Esta cadena final se imprime en el fichero .log.
+		String cadenaFinal = "[" + ahora + "][" + nombreUsuario + "]" + "[" + cadena + "]";
+
+		try {
+			FileWriter fw = new FileWriter("movimientos.log", true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			pw.println(cadenaFinal);
+
+			pw.close();
+			bw.close();
+			fw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int darDeAlta(String sentencia) {
 
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
-			actualizarLog(sentencia);
+			actualizarLog("ALTA: " + sentencia);
 			return 0;
 		} catch (SQLException sqle) {
 			System.out.println("Error 2-" + sqle.getMessage());
@@ -87,6 +147,8 @@ public class ConexionP {
 		}
 	}
 
+	// MÉTODOS PACIENTES:
+	
 	public void rellenarListaPacientes(TextArea listaPacientes) {
 
 		String sentencia = "select idPaciente, nombrePaciente, DNIPaciente, edadPaciente, fechaInicioTratamiento from practicagestion.pacientes";
@@ -95,11 +157,11 @@ public class ConexionP {
 
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet resultado = statement.executeQuery(sentencia);
-			
-			actualizarLog(sentencia);
-			
+
+			actualizarLog("CONSULTA: " + sentencia);
+
 			while (resultado.next()) {
-				String fechaFormateada=fechaFormatToEspanyol(resultado.getString("fechaInicioTratamiento"));
+				String fechaFormateada = fechaFormatToEspanyol(resultado.getString("fechaInicioTratamiento"));
 				listaPacientes.append(resultado.getString("idPaciente") + " ");
 				listaPacientes.append(resultado.getString("nombrePaciente") + " ");
 				listaPacientes.append(resultado.getString("DNIPaciente") + " ");
@@ -136,7 +198,7 @@ public class ConexionP {
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
-			actualizarLog(sentencia);
+			actualizarLog("BAJA: " + sentencia);
 			return 0;
 
 		} catch (SQLException sqle) {
@@ -168,7 +230,7 @@ public class ConexionP {
 		try {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			statement.executeUpdate(sentencia);
-			actualizarLog(sentencia);
+			actualizarLog("MODIFICACIÓN: " + sentencia);
 			return 0;
 		} catch (SQLException sqle) {
 			System.out.println("Error 9-" + sqle.getMessage());
@@ -176,60 +238,80 @@ public class ConexionP {
 		}
 	}
 
-	public String fechaFormatToAnglosajon(String fecha){
+	// MÉTODOS PSICOLOGOS:
 
-		Date date1 = null;
+	public void rellenarChoPsicologo(Choice choPsicologos) {
+
+		String sentencia = "select idPsicologo, nombrePsicologo from psicologos order by 1;";
+
 		try {
-			date1 = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-		String fechaNueva = formatoFecha.format(date1);
-		return fechaNueva;
-	}
-	
-	public String fechaFormatToEspanyol (String fecha) {
-		
-		Date date1 = null;
-		try {
-			date1 = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
-		String fechaNueva = formatoFecha.format(date1);
-		return fechaNueva;
-	}
-	
-	// M�todo para guardar en nombreUsuario el nombre del usuario que se registre.
-	public void setNombreUsuario (String nombreUsuario) {
-		ConexionP.nombreUsuario = nombreUsuario;
-	}
-	
-	public void actualizarLog (String cadena) {
-		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
-		LocalDateTime now = LocalDateTime.now();
-		String ahora = dtf.format(now);
-		
-		// Se crea una cadena que incluye el momento actual, el nombre de usuario y la cadena
-		// que se le pasa por par�metros (que es la sentencia en la mayor�a de casos).
-		// Esta cadena final se imprime en el fichero .log.
-		String cadenaFinal = "[" + ahora + "][" + nombreUsuario + "]" + cadena;
-	
-		try {
-			FileWriter fw = new FileWriter("registro.log", true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			PrintWriter pw = new PrintWriter(bw);
-			pw.println(cadenaFinal);
-			
-			pw.close(); bw.close(); fw.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultado = statement.executeQuery(sentencia);
+
+			while (resultado.next()) {
+				choPsicologos.add(resultado.getString("idPsicologo") + "-" + resultado.getString("nombrePsicologo"));
+			}
+		} catch (SQLException sqle) {
+			System.out.println("Error 5-" + sqle.getMessage());
 		}
 	}
 
+	public void rellenarListaPsicologos(TextArea listaPsicologos) {
+
+		String sentencia = "select idPsicologo, nombrePsicologo, DNIPsicologo, idSupervisorFK "
+				+ "from psicologos order by 1;";
+		
+		try {
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultado = statement.executeQuery(sentencia);
+	
+			actualizarLog("CONSULTA: " + sentencia);
+			
+			while (resultado.next()) {
+				listaPsicologos.append(resultado.getString("idPsicologo") + " ");
+				listaPsicologos.append(resultado.getString("nombrePsicologo") + " ");
+				listaPsicologos.append(resultado.getString("DNIPsicologo") + "\n");
+				
+			}
+		} catch (SQLException sqle) {
+			System.out.println("Error 5-" + sqle.getMessage());
+		}
+	}
+	
+	// MÉTODOS SESIONES:
+	
+	public void rellenarListaSesiones (TextArea listaSesiones) {
+
+		String sentencia = "select idSesion, fechaSesion, precioSesion, pagada, nombrePsicologo, nombrePaciente\r\n"
+				+ "  from sesiones\r\n"
+				+ "  join psicologos on sesiones.idPsicologoFK = psicologos.idPsicologo\r\n"
+				+ "  join pacientes on sesiones.idPacienteFK = pacientes.idPaciente\r\n"
+				+ "  order by 1;;";
+		
+		String pagada = "";
+		String fecha = "";
+		try {
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultado = statement.executeQuery(sentencia);
+
+			actualizarLog("CONSULTA: " + sentencia);
+
+			while (resultado.next()) {
+				if (resultado.getInt("pagada") == 0) { pagada = "No";} else {pagada = "Sí";}
+				
+				fecha = fechaFormatToEspanyol(resultado.getString("fechaSesion"));
+				
+				listaSesiones.append(resultado.getString("idSesion") + " ");
+				listaSesiones.append(fecha + " ");
+				listaSesiones.append(resultado.getString("precioSesion") + "€         ");
+				listaSesiones.append(pagada + "           ");
+				listaSesiones.append(resultado.getString("nombrePaciente") + "   ");
+				listaSesiones.append(resultado.getString("nombrePsicologo") + "\n");
+			}
+		} catch (SQLException sqle) {
+			System.out.println("Error 5-" + sqle.getMessage());
+		}
+	}
+
+	
 }

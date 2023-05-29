@@ -113,7 +113,7 @@ public class NuevoPacienteP implements ActionListener, WindowListener {
 				
 				String sentencia = "insert into pacientes values (null, '" + txtNombre.getText() + "', '"
 						+ txtDNI.getText() + "', '" + txtEdad.getText() + "', '" + fechaFormateada + "');";
-				int respuesta = conexion.altaPaciente(sentencia);
+				int respuesta = conexion.darDeAlta(sentencia);
 
 				if (respuesta != 0) {
 					lblMensaje.setText("Error en Alta.");

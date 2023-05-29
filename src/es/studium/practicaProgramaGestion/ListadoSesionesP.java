@@ -17,16 +17,16 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 
-public class ListadoPacientesP implements WindowListener, ActionListener {
+public class ListadoSesionesP implements WindowListener, ActionListener {
 
-	Frame ventana = new Frame("Listado Pacientes");
+	Frame ventana = new Frame("Listado Sesiones");
 
-	TextArea listaPacientes = new TextArea(6, 30);
+	TextArea listaSesiones = new TextArea(6, 30);
 	Button btnPdf = new Button("PDF");
 
 	ConexionP conexion = new ConexionP();
 
-	ListadoPacientesP() {
+	ListadoSesionesP() {
 
 		ventana.setSize(300, 225);
 		ventana.setResizable(false);
@@ -35,13 +35,13 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 
 		ventana.addWindowListener(this);
 
-		ventana.add(listaPacientes);
+		ventana.add(listaSesiones);
 		ventana.add(btnPdf);
-
-		listaPacientes.append("   Nombre / Dni / Edad / Fecha Ingreso\n");
-		conexion.rellenarListaPacientes(listaPacientes);
-
 		btnPdf.addActionListener(this);
+		
+		listaSesiones.append("      Fecha /   Precio   / Pagada / Paciente / Psicólogo\n");
+
+		conexion.rellenarListaSesiones(listaSesiones);
 
 		ventana.setVisible(true);
 	}
@@ -77,7 +77,7 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		
 		if (e.getSource().equals(btnPdf)) {
 
 			try {
@@ -88,7 +88,7 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 				// Initialize document
 				Document document = new Document(pdf);
 				// Add paragraph to the document
-				document.add(new Paragraph("LISTA PACIENTES\n" + listaPacientes.getText()));
+				document.add(new Paragraph("LISTA SESIONES\n" + listaSesiones.getText()));
 				// Close document
 				document.close();
 				// Open the new PDF document just created
@@ -97,6 +97,6 @@ public class ListadoPacientesP implements WindowListener, ActionListener {
 			} catch (IOException ioe) {
 			}
 		}
-
+		
 	}
 }

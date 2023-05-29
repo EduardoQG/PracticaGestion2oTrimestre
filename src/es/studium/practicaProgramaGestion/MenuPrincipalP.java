@@ -24,17 +24,11 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 	
 	ConexionP conexion = new ConexionP();
 	
-	/* 
-	(TERCER TRIMESTRE) 
 	MenuItem psiItemNuevo = new MenuItem("Nuevo");
-	MenuItem psitemListado = new MenuItem("Listado");
-	MenuItem psiItemBaja = new MenuItem("Baja");
-	MenuItem psiItemModificar = new MenuItem("Modificar");
+	MenuItem psiItemListado = new MenuItem("Listado");
+
 	MenuItem sesItemNuevo = new MenuItem("Nuevo");
-	MenuItem sestemListado = new MenuItem("Listado");
-	MenuItem sesItemBaja = new MenuItem("Baja");
-	MenuItem sesItemModificar = new MenuItem("Modificar");
-	*/
+	MenuItem sesItemListado = new MenuItem("Listado");
 	
 	MenuPrincipalP (int t) {
 
@@ -52,25 +46,34 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 		menuBar.add(menuSesiones);
 		
 		menuPacientes.add(pacItemNuevo);
+		menuPsicologos.add(psiItemNuevo);
+		menuSesiones.add(sesItemNuevo);
 		
 		if(tipoUsuario == 0) {
 			menuPacientes.add(pacItemListado);
 			menuPacientes.add(pacItemBaja);
 			menuPacientes.add(pacItemModificar);
+			
+			menuPsicologos.add(psiItemListado);
+			
+			menuSesiones.add(sesItemListado);
 		}
 		
 		pacItemNuevo.addActionListener(this);
 		pacItemListado.addActionListener(this);
 		pacItemBaja.addActionListener(this);
 		pacItemModificar.addActionListener(this);
+		psiItemNuevo.addActionListener(this);
+		psiItemListado.addActionListener(this);
+		sesItemNuevo.addActionListener(this);
+		sesItemListado.addActionListener(this);
 
 		ventanaMenu.setVisible(true);
 		
 	}
 	
 	@Override
-	public void windowOpened(WindowEvent e) {
-	}
+	public void windowOpened(WindowEvent e) {}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
@@ -79,24 +82,19 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 	}
 
 	@Override
-	public void windowClosed(WindowEvent e) {
-	}
+	public void windowClosed(WindowEvent e) {}
 
 	@Override
-	public void windowIconified(WindowEvent e) {
-	}
+	public void windowIconified(WindowEvent e) {}
 
 	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
+	public void windowDeiconified(WindowEvent e) {}
 
 	@Override
-	public void windowActivated(WindowEvent e) {
-	}
+	public void windowActivated(WindowEvent e) {}
 
 	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -116,6 +114,22 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 		else if (e.getSource().equals(pacItemModificar)) {
 			new ModificarPacienteP();
 		} 
+		
+		else if (e.getSource().equals(psiItemNuevo)) {
+			new NuevoPsicologoP();
+		}
+		
+		else if (e.getSource().equals(psiItemListado)) {
+			new ListadoPsicologosP();
+		}
+		
+		else if (e.getSource().equals(sesItemNuevo)) {
+			new NuevaSesionP();
+		}
+		
+		else if (e.getSource().equals(sesItemListado)) {
+			new ListadoSesionesP();
+		}
 	}
 }
 	
