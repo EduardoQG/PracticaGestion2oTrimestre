@@ -2,3 +2,48 @@
 [28/05/2023 19:55:20][a][ALTA: insert into sesiones values (null, '2023-02-14', '50', 0, 2, 7);]
 [28/05/2023 19:55:24][a][CONSULTA: select idPsicologo, nombrePsicologo, DNIPsicologo, idSupervisorFK from psicologos order by 1;]
 [28/05/2023 19:55:26][a][Ha salido.]
+[30/05/2023 18:28:18][a][Se ha logueado.]
+[30/05/2023 18:29:30][a][Ha salido.]
+[30/05/2023 18:30:56][a][Se ha logueado.]
+[30/05/2023 18:30:58][a][CONSULTA: select idSesion, fechaSesion, precioSesion, pagada, nombrePsicologo, nombrePaciente
+  from sesiones
+  join psicologos on sesiones.idPsicologoFK = psicologos.idPsicologo
+  join pacientes on sesiones.idPacienteFK = pacientes.idPaciente
+  order by 1;;]
+[30/05/2023 18:31:07][a][Ha salido.]
+[30/05/2023 18:32:16][a][Se ha logueado.]
+[30/05/2023 18:32:17][a][CONSULTA: select idSesion, fechaSesion, precioSesion, pagada, nombrePsicologo, nombrePaciente
+  from sesiones
+  join psicologos on sesiones.idPsicologoFK = psicologos.idPsicologo
+  join pacientes on sesiones.idPacienteFK = pacientes.idPaciente
+  order by 1;]
+[30/05/2023 18:32:32][a][Ha salido.]
+[31/05/2023 17:16:57][a][Se ha logueado.]
+[31/05/2023 17:17:43][a][Se ha logueado.]
+[31/05/2023 17:17:46][a][CONSULTA: select idPaciente, nombrePaciente, DNIPaciente, edadPaciente, fechaInicioTratamiento from practicagestion.pacientes]
+[31/05/2023 17:18:02][a][Ha salido.]
+[31/05/2023 17:18:05][a][Ha salido.]
+[31/05/2023 17:21:09][a][Se ha logueado.]
+[31/05/2023 17:21:15][a][Ha salido.]
+[31/05/2023 17:22:52][a][Se ha logueado.]
+[31/05/2023 17:23:01][a][BAJA: delete from pacientes where idPaciente = 6]
+[31/05/2023 17:23:05][a][Ha salido.]
+[31/05/2023 17:29:19][a][Se ha logueado.]
+[31/05/2023 17:29:21][a][Ha salido.]
+[31/05/2023 17:30:01][a][Se ha logueado.]
+[31/05/2023 17:30:46][a][Ha salido.]
+[31/05/2023 19:42:36][a][Se ha logueado.]
+[31/05/2023 19:43:00][a][Ha salido.]
+[31/05/2023 19:43:03][a][Se ha logueado.]
+[31/05/2023 19:43:18][a][Ha salido.]
+[01/06/2023 10:17:55][a][Se ha logueado.]
+[01/06/2023 10:18:35][a][ALTA: insert into psicologos values (null, 'Jesús', '45123678I', 'Terapia de adicciones', 2);]
+[01/06/2023 10:25:05][a][CONSULTA: select idPsicologo, nombrePsicologo, DNIPsicologo, idSupervisorFK from psicologos order by 1;]
+[01/06/2023 10:27:24][a][Ha salido.]
+[01/06/2023 10:31:53][a][Se ha logueado.]
+[01/06/2023 10:32:24][a][ALTA: insert into sesiones values (null, '1990-01-12', '32', 0, 1, 4);]
+[01/06/2023 10:35:00][a][CONSULTA: select idSesion, fechaSesion, precioSesion, pagada, nombrePsicologo, nombrePaciente
+  from sesiones
+  join psicologos on sesiones.idPsicologoFK = psicologos.idPsicologo
+  join pacientes on sesiones.idPacienteFK = pacientes.idPaciente
+  order by 1;]

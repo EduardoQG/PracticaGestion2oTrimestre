@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 
 public class MenuPrincipalP implements WindowListener, ActionListener {
 
@@ -17,23 +18,26 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 	Menu menuPacientes = new Menu("Pacientes");
 	Menu menuPsicologos = new Menu("Psicólogos");
 	Menu menuSesiones = new Menu("Sesiones");
+	Menu menuAyuda = new Menu("Ayuda");
 	MenuItem pacItemNuevo = new MenuItem("Nuevo");
 	MenuItem pacItemListado = new MenuItem("Listado");
 	MenuItem pacItemBaja = new MenuItem("Baja");
 	MenuItem pacItemModificar = new MenuItem("Modificar");
-	
+
 	ConexionP conexion = new ConexionP();
-	
+
 	MenuItem psiItemNuevo = new MenuItem("Nuevo");
 	MenuItem psiItemListado = new MenuItem("Listado");
 
 	MenuItem sesItemNuevo = new MenuItem("Nuevo");
 	MenuItem sesItemListado = new MenuItem("Listado");
-	
-	MenuPrincipalP (int t) {
+
+	MenuItem itemAyuda = new MenuItem("Ayuda");
+
+	MenuPrincipalP(int t) {
 
 		int tipoUsuario = t;
-		
+
 		ventanaMenu.setSize(400, 400);
 		ventanaMenu.setResizable(false);
 		ventanaMenu.setLocationRelativeTo(null);
@@ -44,21 +48,23 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 		menuBar.add(menuPacientes);
 		menuBar.add(menuPsicologos);
 		menuBar.add(menuSesiones);
-		
+
 		menuPacientes.add(pacItemNuevo);
 		menuPsicologos.add(psiItemNuevo);
 		menuSesiones.add(sesItemNuevo);
-		
-		if(tipoUsuario == 0) {
+
+		if (tipoUsuario == 0) {
 			menuPacientes.add(pacItemListado);
 			menuPacientes.add(pacItemBaja);
 			menuPacientes.add(pacItemModificar);
-			
+
 			menuPsicologos.add(psiItemListado);
-			
+
 			menuSesiones.add(sesItemListado);
 		}
-		
+		menuBar.add(menuAyuda);
+		menuAyuda.add(itemAyuda);
+
 		pacItemNuevo.addActionListener(this);
 		pacItemListado.addActionListener(this);
 		pacItemBaja.addActionListener(this);
@@ -67,13 +73,15 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 		psiItemListado.addActionListener(this);
 		sesItemNuevo.addActionListener(this);
 		sesItemListado.addActionListener(this);
+		itemAyuda.addActionListener(this);
 
 		ventanaMenu.setVisible(true);
-		
+
 	}
-	
+
 	@Override
-	public void windowOpened(WindowEvent e) {}
+	public void windowOpened(WindowEvent e) {
+	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
@@ -82,55 +90,67 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 	}
 
 	@Override
-	public void windowClosed(WindowEvent e) {}
+	public void windowClosed(WindowEvent e) {
+	}
 
 	@Override
-	public void windowIconified(WindowEvent e) {}
+	public void windowIconified(WindowEvent e) {
+	}
 
 	@Override
-	public void windowDeiconified(WindowEvent e) {}
+	public void windowDeiconified(WindowEvent e) {
+	}
 
 	@Override
-	public void windowActivated(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {
+	}
 
 	@Override
-	public void windowDeactivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e) {
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
+
 		if (e.getSource().equals(pacItemNuevo)) {
 			new NuevoPacienteP();
 		}
-		
+
 		else if (e.getSource().equals(pacItemListado)) {
 			new ListadoPacientesP();
 		}
-		
+
 		else if (e.getSource().equals(pacItemBaja)) {
 			new EliminarPacienteP();
 		}
-		
+
 		else if (e.getSource().equals(pacItemModificar)) {
 			new ModificarPacienteP();
-		} 
-		
+		}
+
 		else if (e.getSource().equals(psiItemNuevo)) {
 			new NuevoPsicologoP();
 		}
-		
+
 		else if (e.getSource().equals(psiItemListado)) {
 			new ListadoPsicologosP();
 		}
-		
+
 		else if (e.getSource().equals(sesItemNuevo)) {
 			new NuevaSesionP();
 		}
-		
+
 		else if (e.getSource().equals(sesItemListado)) {
 			new ListadoSesionesP();
 		}
+
+		else if (e.getSource().equals(itemAyuda)) {
+
+			try {
+				Runtime.getRuntime().exec("hh.exe ayudaDef/ayudaDef2.chm");
+			} catch (IOException eo) {
+				eo.printStackTrace();
+			}
+		}
 	}
 }
-	
-	

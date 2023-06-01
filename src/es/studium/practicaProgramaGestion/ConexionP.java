@@ -181,7 +181,7 @@ public class ConexionP {
 			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			ResultSet resultado = statement.executeQuery(sentencia);
 
-			pacienteChoice.add("Elige un usuario:");
+			pacienteChoice.add("Elige un paciente:");
 
 			while (resultado.next()) {
 				pacienteChoice.add(resultado.getString("idPaciente") + "-" + resultado.getString("nombrePaciente"));
@@ -286,7 +286,7 @@ public class ConexionP {
 				+ "  from sesiones\r\n"
 				+ "  join psicologos on sesiones.idPsicologoFK = psicologos.idPsicologo\r\n"
 				+ "  join pacientes on sesiones.idPacienteFK = pacientes.idPaciente\r\n"
-				+ "  order by 1;;";
+				+ "  order by 1;";
 		
 		String pagada = "";
 		String fecha = "";
@@ -311,7 +311,5 @@ public class ConexionP {
 		} catch (SQLException sqle) {
 			System.out.println("Error 5-" + sqle.getMessage());
 		}
-	}
-
-	
+	}	
 }

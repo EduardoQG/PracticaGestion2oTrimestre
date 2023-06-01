@@ -140,7 +140,7 @@ Frame ventana = new Frame ("Baja Paciente");
 			dlgMensaje.addWindowListener(this);
 			
 			if (respuesta == 0) {
-				lblMensaje.setText("Usuario Eliminado.");
+				lblMensaje.setText("Paciente eliminado.");
 				
 			} else {
 				lblMensaje.setText("Error al eliminar.");
