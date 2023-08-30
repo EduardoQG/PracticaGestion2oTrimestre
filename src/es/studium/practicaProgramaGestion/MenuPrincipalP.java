@@ -147,7 +147,7 @@ public class MenuPrincipalP implements WindowListener, ActionListener {
 		else if (e.getSource().equals(itemAyuda)) {
 
 			try {
-				Runtime.getRuntime().exec("hh.exe ayudaDef/ayudaDef2.chm");
+				Runtime.getRuntime().exec("hh.exe ayudaDef2/ayudaDef2.chm");
 			} catch (IOException eo) {
 				eo.printStackTrace();
 			}
